@@ -16,13 +16,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="buat/buat.php">Buat</a>
+                            <a class="nav-link" href="../buat/buat.php">Buat</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="mekanik/mekanik.php">Mekanik</a>
+                            <a class="nav-link" href="../mekanik/mekanik.php">Mekanik</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="riwayat/riwayat.php">Riwayat</a></a>
+                            <a class="nav-link" href="../riwayat/riwayat.php">Riwayat</a></a>
                         </li>
                     </ul>
                 </div>
@@ -31,7 +31,40 @@
     </header>
 
     <main>
-		
+		<div class="container mt-5">
+			<div class="card text-white bg-secondary mb-3">
+				<div class="card-header">
+                <center>
+					<h2>Pemilihan Mekanik</h2> 
+                    <center>
+				</div>
+				<div class="card-body">
+					<table class="table table-dark table-striped table-hover">
+						<thead>
+							<tr>
+								<th scope="col">Nama Mekanik</th>
+								<th scope="col">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							include '../../core/koneksi.php';
+							$query = mysqli_query($konek, "select mekanik.id_mekanik, mekanik.nama_mekanik, statusmekanik.nama_status from mekanik INNER JOIN statusmekanik ON mekanik.id_status=statusmekanik.id_status WHERE nama_status='senggang'");
+                            while ($data = mysqli_fetch_array($query)) { ?>
+                                <tr>
+                                    <td><?php echo $data['nama_mekanik']; ?></td>
+                                    <td>
+                                        <?php
+                                            echo '<a class="btn btn-success" href="../../core/pilihMekanik.php?id_mekanik=' . $data['id_mekanik'] . '&id_order=' . $_GET['id_order'] . '">Pilih</a>';
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
     </main>
 
     <footer class="bg-dark">

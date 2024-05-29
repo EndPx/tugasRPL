@@ -32,31 +32,45 @@
 
     <main>
         <div class="container mt-5">
-            <div class="card text-white bg-secondary mb-3">
-                <div class="card-header">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-header">
                     <center>
-                        <h2>Tambah Order</h2> 
-                    </center>
-                </div>
-                <div class="card-body">
-                    <form action="../../core/buatOrder.php" method="post" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label for="name">Nama Pelanggan:</label>
-                            <input type="text" class="form-control" id="nama_pelanggan" name="nama_pelanggan" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Plat Kendaraan:</label>
-                            <input type="text" class="form-control" id="plat_kendaraan_pelanggan" name="plat_kendaraan_pelanggan" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Keluhan:</label>
-                            <input type="text" class="form-control" id="keluhan_order" name="keluhan_order" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary mx-auto d-block">Add</button>
-                    </form>
+                    <a class="btn btn-primary" href="javascript:history.go(-1)">Kembali</a>
+                        <h2>Riwayat Order</h2> 
+                        <center>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-dark table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Id Order</th>
+                                    <th scope="col">Nama Pelanggan</th>
+                                    <th scope="col">Plat Kendaraan</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                include '../../core/koneksi.php';
+                                $query = mysqli_query($konek, "select * FROM `order` WHERE id_status=2;");
+                                while ($data = mysqli_fetch_array($query)) { ?>
+                                    <tr>
+                                        <td><?php echo $data['id_order']; ?></td>
+                                        <td><?php echo $data['nama_pelanggan']; ?></td>
+                                        <td><?php echo $data['plat_kendaraan_pelanggan']; ?></td>
+                                        <td>
+                                            <?php
+                                                echo '<a class="btn btn-success" href="detail.php?id_order=' . $data['id_order'] . '">Detail</a>';
+                                                echo '<a class="btn btn-success" href="formHarga.php?id_order=' . $data['id_order'] . '">Selesaikan</a>';
+                                            ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
     </main>
 
     <footer class="bg-dark">

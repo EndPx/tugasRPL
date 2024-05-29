@@ -16,13 +16,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="buat/buat.php">Buat</a>
+                            <a class="nav-link" href="../buat/buat.php">Buat</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="mekanik/mekanik.php">Mekanik</a>
+                            <a class="nav-link" href="../mekanik/mekanik.php">Mekanik</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="riwayat/riwayat.php">Riwayat</a></a>
+                            <a class="nav-link" href="../riwayat/riwayat.php">Riwayat</a></a>
                         </li>
                     </ul>
                 </div>
@@ -31,7 +31,32 @@
     </header>
 
     <main>
-		
+        <div class="container mt-5">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header">
+                    <center>
+                        <h2>Tambah Order</h2> 
+                    </center>
+                </div>
+                <div class="card-body">
+                    
+                    <?php 
+                        include '../../core/koneksi.php';
+                        $id_order = mysqli_real_escape_string($konek, $_GET['id_order']);
+                        $query = mysqli_query($konek, "SELECT id_mekanik FROM `order` WHERE id_order = '$id_order'");
+
+                        $data = mysqli_fetch_array($query);
+                    ?>
+                    <form action="../../core/perbaruOrder.php?id_order=<?php echo $_GET['id_order'] ?>&id_mekanik=<?php echo $data['id_mekanik']; ?>" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="name">Biaya:</label>
+                            <input type="text" class="form-control" id="biaya_order" name="biaya_order" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mx-auto d-block">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer class="bg-dark">

@@ -31,7 +31,9 @@
     </header>
 
     <main>
-		
+        <a class="btn btn-success" href="mencari.php">Order Mencari Mekanik</a>
+        <a class="btn btn-success" href="proses.php">Order Dalam Proses</a>
+        <a class="btn btn-success" href="riwayatOrder.php">Riwayat Order</a>
     </main>
 
     <footer class="bg-dark">
