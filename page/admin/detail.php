@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (empty($_SESSION["id"])) {
+    header("location:../login.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <header class="bg-dark">
-        <nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Bengkel Website</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,14 +22,14 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
-                    <li class="nav-item">
-                            <a class="nav-link" href="../buat/buat.php">Buat</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./order.php">Permintaan</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../mekanik/mekanik.php">Mekanik</a>
+                            <a class="nav-link" href="./mekanik.php">Mekanik</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../riwayat/riwayat.php">Riwayat</a></a>
+                            <a class="nav-link" href="../../core/logout.php">Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -32,48 +39,49 @@
 
     <main>
         <div class="container mt-5">
-        <a class="btn btn-primary" href="javascript:history.go(-1)">Kembali</a>
         <?php
             include '../../core/koneksi.php';
-            $query = mysqli_query($konek, "SELECT o.*, m.nama_mekanik, so.nama_status
-                                            FROM `order` o
-                                            LEFT JOIN mekanik m ON o.id_mekanik = m.id_mekanik
-                                            LEFT JOIN statusorder so ON o.id_status = so.id_status
-                                            WHERE o.id_order = '$_GET[id_order]'");
+            $query = mysqli_query($konek, "SELECT o.*, m.nama AS nama_mekanik, a.username AS nama_admin
+                                            FROM `permintaan` o
+                                            INNER JOIN mekanik m ON o.id_mekanik = m.id
+                                            INNER JOIN `admin` a ON o.id_admin = a.id
+                                            WHERE o.id = '$_GET[id]'");
 
             while ($data = mysqli_fetch_array($query)) {
-                $id_order = $data['id_order'];
-                $nama_pelanggan = $data['nama_pelanggan'];
-                $plat_kendaraan_pelanggan = $data['plat_kendaraan_pelanggan'];
-                $keluhan_order = $data['keluhan_order'];
-                $tanggal_order = $data['tanggal_order'];
+                $id_order = $data['id'];
+                $status = $data['status'];
+                $nama_pelanggan = $data['nama'];
+                $plat_kendaraan_pelanggan = $data['plat_kendaraan'];
+                $keluhan_order = $data['keluhan'];
+                $tanggal_order = $data['tanggal'];
+                $detail_perbaikan = $data['detail'];
+                $biaya_order = $data['biaya'];
                 $nama_mekanik = $data['nama_mekanik'];
-                $biaya_order = $data['biaya_order'];
-                $nama_status = $data['nama_status'];
+                $nama_admin = $data['nama_admin'];
 
                 echo "ID Order: $id_order<br>";
-                echo "Nama Status: $nama_status<br>";
+                echo "Nama Status: $status<br>";
                 echo "Nama Pelanggan: $nama_pelanggan<br>";
                 echo "Plat Kendaraan Pelanggan: $plat_kendaraan_pelanggan<br>";
                 echo "Keluhan Order: $keluhan_order<br>";
                 echo "Tanggal Order: $tanggal_order<br>";
-
-                if ($nama_mekanik !== NULL) {
-                    echo "Nama Mekanik: $nama_mekanik<br>";
+                if ($detail_perbaikan !== NULL) {
+                    echo "Detail Perbaikan: $detail_perbaikan<br>";
                 } else {
-                    echo "Nama Mekanik: Tidak ada mekanik yang ditugaskan<br>";
+                    echo "Detail Perbaikan: Belum Diperbaiki<br>";
                 }
                 if ($biaya_order !== NULL) {
                     echo "Biaya Order: $biaya_order<br>";
                 } else {
                     echo "Biaya Order: Belum Ditentukan<br>";
                 }
+                echo "Nama Mekanik: $nama_mekanik<br>";
+                echo "Username Admin: $nama_admin<br>";
 
-                if($data['id_status']==1){
-                    echo '<a class="btn btn-success" href="../mekanik/pemilihanMekanik.php?id_order=' . $data['id_order'] . '">Mencari Mekanik</a>';
-                }else if($data['id_status']==2){
-                    echo '<a class="btn btn-success" href="formHarga.php?id_order=' . $data['id_order'] . '">Selesaikan</a>';
-                }
+
+                
+
+
             }
         ?>
            

@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (empty($_SESSION["id"])) {
+    header("location:../login.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <header class="bg-dark">
-        <nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Bengkel Website</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,13 +23,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="../buat/buat.php">Buat</a>
+                            <a class="nav-link" href="./dashboard.php">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../mekanik/mekanik.php">Mekanik</a>
+                            <a class="nav-link" href="./orderNow.php">Pemesanan Sekarang</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../riwayat/riwayat.php">Riwayat</a></a>
+                            <a class="nav-link" href="../../core/logout.php">Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -31,40 +38,16 @@
     </header>
 
     <main>
-		<div class="container mt-5">
-			<div class="card text-white bg-secondary mb-3">
-				<div class="card-header">
-                <center>
-					<h2>Pemilihan Mekanik</h2> 
-                    <center>
-				</div>
-				<div class="card-body">
-					<table class="table table-dark table-striped table-hover">
-						<thead>
-							<tr>
-								<th scope="col">Nama Mekanik</th>
-								<th scope="col">Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-							include '../../core/koneksi.php';
-							$query = mysqli_query($konek, "select mekanik.id_mekanik, mekanik.nama_mekanik, statusmekanik.nama_status from mekanik INNER JOIN statusmekanik ON mekanik.id_status=statusmekanik.id_status WHERE nama_status='senggang'");
-                            while ($data = mysqli_fetch_array($query)) { ?>
-                                <tr>
-                                    <td><?php echo $data['nama_mekanik']; ?></td>
-                                    <td>
-                                        <?php
-                                            echo '<a class="btn btn-success" href="../../core/pilihMekanik.php?id_mekanik=' . $data['id_mekanik'] . '&id_order=' . $_GET['id_order'] . '">Pilih</a>';
-                                        ?>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
+        <div class="container mt-5">
+        <?php
+            include '../../core/koneksi.php';
+            $query = mysqli_query($konek, "SELECT *
+                                            FROM mekanik
+                                            WHERE id = '$_SESSION[id]'");
+            $data = mysqli_fetch_array($query);
+            echo $data["status"];
+            echo $data["total_permintaan"];
+            ?>
     </main>
 
     <footer class="bg-dark">

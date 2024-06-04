@@ -1,5 +1,8 @@
 <?php
-$totalHarga = 0;
+session_start();
+if (empty($_SESSION["id"])) {
+    header("location:../login.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -10,6 +13,7 @@ $totalHarga = 0;
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
+<body>
 <header class="bg-dark">
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
@@ -20,13 +24,13 @@ $totalHarga = 0;
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="../buat/buat.php">Buat</a>
+                            <a class="nav-link" href="./order.php">Permintaan</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../mekanik/mekanik.php">Mekanik</a>
+                            <a class="nav-link" href="./mekanik.php">Mekanik</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../riwayat/riwayat.php">Riwayat</a></a>
+                            <a class="nav-link" href="../../core/logout.php">Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -36,10 +40,47 @@ $totalHarga = 0;
 
     <main>
         <div class="container mt-5">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header">
+                    <center>
+                        <h2>Tambah Order</h2> 
+                    </center>
+                </div>
+                <div class="card-body">
+                    <form action="../../core/buatOrder.php" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="name">Nama Pelanggan:</label>
+                            <input type="text" class="form-control" id="nama" name="nama" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Plat Kendaraan:</label>
+                            <input type="text" class="form-control" id="plat_kendaraan" name="plat_kendaraan" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Keluhan:</label>
+                            <input type="text" class="form-control" id="keluhan" name="keluhan" required>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-select form-select-sm" name="id_mekanik" id="id_mekanik" required>
+                                <option value="">Pilih Mekanik</option>
+                                <?php
+                                include '../../core/koneksi.php';
+                                $query = mysqli_query($konek, "SELECT * FROM mekanik WHERE status='senggang'");
+                                while($row = mysqli_fetch_assoc($query)) {
+                                    echo '<option value="'.$row['id'].'">'.$row['nama'].'</option>';
+                                }
+                            ?>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mx-auto d-block">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="container mt-5">
                 <div class="card text-white bg-secondary mb-3">
                     <div class="card-header">
                     <center>
-                    <a class="btn btn-primary" href="javascript:history.go(-1)">Kembali</a>
                         <h2>Riwayat Order</h2> 
                     <center>
                     </div>
@@ -56,15 +97,16 @@ $totalHarga = 0;
                             <tbody>
                                 <?php
                                 include '../../core/koneksi.php';
-                                $query = mysqli_query($konek, "select * FROM `order` WHERE id_status=3;");
-                                while ($data = mysqli_fetch_array($query)) { $totalHarga += $data['biaya_order'];?>
+                                $query = mysqli_query($konek, "select * FROM `Permintaan`");
+                                $totalHarga=0;
+                                while ($data = mysqli_fetch_array($query)) { $totalHarga += $data['biaya'];?>
                                     <tr>
-                                        <td><?php echo $data['id_order']; ?></td>
-                                        <td><?php echo $data['nama_pelanggan']; ?></td>
-                                        <td><?php echo $data['plat_kendaraan_pelanggan']; ?></td>
+                                        <td><?php echo $data['id']; ?></td>
+                                        <td><?php echo $data['nama']; ?></td>
+                                        <td><?php echo $data['plat_kendaraan']; ?></td>
                                         <td>
                                             <?php
-                                                echo '<a class="btn btn-success" href="detail.php?id_order=' . $data['id_order'] . '">Detail</a>';
+                                                echo '<a class="btn btn-success" href="detail.php?id=' . $data['id'] . '">Detail</a>';
                                             ?>
                                         </td>
                                     </tr>

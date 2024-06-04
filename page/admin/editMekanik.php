@@ -1,3 +1,18 @@
+<?php
+session_start();
+if (empty($_SESSION["id"])) {
+    header("location:../login.php");
+}
+?>
+
+<?php
+include '../../core/koneksi.php';
+$id = $_GET['id'];
+$queri = mysqli_query($konek, "SELECT *
+                        FROM mekanik
+                        WHERE id = '$id'");
+$data = mysqli_fetch_array($queri);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +21,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
+<body>
 <header class="bg-dark">
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
@@ -16,13 +32,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="../buat/buat.php">Buat</a>
+                            <a class="nav-link" href="./order.php">Permintaan</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../mekanik/mekanik.php">Mekanik</a>
+                            <a class="nav-link" href="./mekanik.php">Mekanik</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../riwayat/riwayat.php">Riwayat</a></a>
+                            <a class="nav-link" href="../../core/logout.php">Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -31,7 +47,33 @@
     </header>
 
     <main>
-		<div class="container mt-5">
+        <div class="container mt-5">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header">
+                    <center>
+                        <h2>Edit Mekanik</h2>
+                    </center>
+                </div>
+                <div class="card-body">
+                    <form action="../../core/editMekanik.php?id= <?php echo $id ?>" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="name">Nama Mekanik:</label>
+                            <input type="text" class="form-control" value="<?php echo $data['nama']?>" id="nama" name="nama" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Username:</label>
+                            <input type="text" class="form-control" value="<?php echo $data['username']?>" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Password:</label>
+                            <input type="password" class="form-control" value="<?php echo $data['password']?>" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mx-auto d-block">Edit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="container mt-5">
 			<div class="card text-white bg-secondary mb-3">
 				<div class="card-header">
                 <center>
@@ -43,29 +85,24 @@
 						<thead>
 							<tr>
 								<th scope="col">Nama Mekanik</th>
-								<th scope="col">Status</th>
+								<th scope="col">Username</th>
+                                <th scope="col">Password</th>
 								<th scope="col">Action</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php
 							include '../../core/koneksi.php';
-							$query = mysqli_query($konek, "select mekanik.id_mekanik, mekanik.nama_mekanik, statusmekanik.nama_status from mekanik INNER JOIN statusmekanik ON mekanik.id_status=statusmekanik.id_status");
+							$query = mysqli_query($konek, "select * from mekanik");
                             while ($data = mysqli_fetch_array($query)) { ?>
                                 <tr>
-                                    <td><?php echo $data['nama_mekanik']; ?></td>
-                                    <td><?php echo $data['nama_status']; ?></td>
+                                    <td><?php echo $data['nama']; ?></td>
+                                    <td><?php echo $data['username']; ?></td>
+                                    <td><?php echo $data['password']; ?></td>
                                     <td>
                                         <?php
-                                            if ($data['nama_status']=="libur") {
-                                                echo '<a class="btn btn-success" href="../../core/editLibur.php?id_mekanik=' . $data['id_mekanik'] . '">Datang Kerja</a>';
-                                            }else if(($data['nama_status']=="senggang")){
-                                                echo '<a class="btn btn-success" href="../../core/editSenggang.php?id_mekanik=' . $data['id_mekanik'] . '">Libur</a>';
-                                            }else{
-                                                $cariorder=mysqli_query($konek, "SELECT mekanik.id_mekanik, order.id_order FROM `order` INNER JOIN mekanik ON `order`.id_mekanik = mekanik.id_mekanik WHERE `order`.id_status = 2");
-                                                $dataorder = mysqli_fetch_array($cariorder);
-                                                echo '<a class="btn btn-success" href="../riwayat/detail.php?id_order=' . $dataorder['id_order'] . '">Lihat Order</a>';
-                                            }
+                                            echo '<a class="btn btn-success" href="./editMekanik.php?id=' . $data['id'] . '">Edit</a>';
+                                            echo '<a class="btn btn-success" href="../../core/hapusMekanik.php?id=' . $data['id'] . '">Hapus</a>';
                                         ?>
                                     </td>
                                 </tr>
