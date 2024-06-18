@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (empty($_SESSION["id"])) {
-    header("location:../login.php");
+    header("location:../loginMekanik.php");
 }
 $id=$_GET['id'];
     include '../../core/koneksi.php';

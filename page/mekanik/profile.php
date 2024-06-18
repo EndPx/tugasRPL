@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (empty($_SESSION["id"])) {
-    header("location:../login.php");
+    header("location:../loginMekanik.php");
 }
 include '../../core/koneksi.php';
     $query = mysqli_query($konek, "SELECT * FROM mekanik
