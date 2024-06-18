@@ -4,123 +4,206 @@ if (empty($_SESSION["id"])) {
     header("location:../login.php");
 }
 ?>
-
 <?php
-include '../../core/koneksi.php';
-$id = $_GET['id'];
-$queri = mysqli_query($konek, "SELECT *
-                        FROM mekanik
-                        WHERE id = '$id'");
-$data = mysqli_fetch_array($queri);
+    include '../../core/koneksi.php';
+    $query = mysqli_query($konek, "SELECT * FROM mekanik
+                                    WHERE id = '$_GET[id]'");
+    $row = mysqli_fetch_array($query);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Bengkel Website</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Bengkel</title>
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link href="../style/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
-<body>
-<header class="bg-dark">
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Bengkel Website</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="./order.php">Permintaan</a>
+
+<body id="page-top">
+    <div id="wrapper">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+                <div class="sidebar-brand-icon rotate-n-60">
+                <i class='fas fa-car-side' style='font-size:48px;color:white'></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">ADMIN Bengkel</div>
+            </a>
+            <hr class="sidebar-divider my-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="index.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">
+                Data Bengkel
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="mekanik.php">
+                    <i class="fas fa-user"></i>
+                    <span>Data Mekanik</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="permintaan.php">
+                    <i class="fas fa-road" ></i>
+                    <span>Data Permintaan</span></a>
+            </li>
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">
+                Pengaturan
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="akun.php"><i class="fas fa-fw fa-cog"></i><span>Data Admin</span></a>
+            </li>
+        </ul>
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in">
+                            </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./mekanik.php">Mekanik</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../../core/logout.php">Logout</a>
-                        </li>
+                        <div class="topbar-divider d-none d-sm-block"></div>
+                            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item dropdown no-arrow">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['username'] ?></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="profile.php">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Profile
+                                    </a>
+                                    <a class="dropdown-item" href="../../core/logout.php" onclick="return confirm('apakah anda yakin?')">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Logout
+                                    </a>
+                                    </div>
+                                </li>
+                            </ul>
                     </ul>
+                </nav>
+                <div class="container-fluid">
+                    
+                    <div class="row">
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4 col-xl-5 col-md-6 mb-4">
+                            <h1 class="h3 mb-0 text-gray-800">Ubah Data Mekanik</h1>
+                        </div>
+                    </div>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="card shadow">
+                                <div class="card-header">
+                                    <h6 class="m-0 font-weight-bold text-primary">Ubah Data</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form method="POST" action="../../core/editMekanik.php?id=<?php echo $row['id']; ?>" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <label for="name">Nama</label>
+                                            <input type="text" value='<?php echo $row["nama"]; ?>'  name="nama" id="nama" required="required" placeholder="Edit Nama" autocomplete="off" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="gender">Gaji</label>
+                                            <input type="text" value='<?php echo $row["gaji"]; ?>' name="gaji" id="gaji" required="required" placeholder="Edit Gaji" autocomplete="off" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="gender">Bonus</label>
+                                            <input type="text" value='<?php echo $row["bonus"]; ?>' name="bonus" id="bonus" required="required" placeholder="Edit Gaji" autocomplete="off" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-pen"></i> Edit</button>
+                                            <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Batal</button>
+                                            <a href='mekanik.php' class='btn btn-sm btn-info'><i class='fas fa-caret-left'></i> Kembali</a>
+                                            <input type='hidden' name='action' value='update'/>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="card shadow">
+                                <div class="card-header">
+                                    <h6 class="m-0 font-weight-bold text-primary">Daftar Mekanik</h6>
+                                </div>
+                                <div class="card-body">
+                                    <?php
+                                        include '../../core/koneksi.php';
+                                        $action = isset($_POST['action']) ? $_POST['action'] : "";
+                                        $query = "select * from mekanik";
+                                        $result = $konek->query($query);
+                                        $num_results = $result->num_rows;
+                                        if($num_results > 0){
+                                            echo "<table class='table table-bordered' id='dataTable' cellspacing='0'>";
+                                            echo "<thead>";
+                                            echo "<tr>";
+                                                echo "<th>No</th>";
+                                                echo "<th>Nama</th>";
+                                                echo "<th>Username</th>";
+                                                echo "<th>Status</th>";
+                                            echo "</tr>";
+                                            echo "</thead>";
+                                            echo "<tbody>";
+                                            $no = 1;
+                                            while($row = $result->fetch_assoc()){
+                                                extract($row);
+                                    ?>
+                                            <tr>
+                                                <td><?php echo $no++; ?></td>
+                                                <td><?php echo $row['nama']; ?></td>
+                                                <td><?php echo $row['username']; ?></td>
+                                                <td><?php echo $row['status']; ?></td>
+                                            </tr>
+                                            
+                                            <?php
+                                            }
+                                            ?>
+                                                
+                                            </tbody>
+                                            </table>
+                                    <?php
+                                        }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
-        </nav>
-    </header>
-
-    <main>
-        <div class="container mt-5">
-            <div class="card text-white bg-secondary mb-3">
-                <div class="card-header">
-                    <center>
-                        <h2>Edit Mekanik</h2>
-                    </center>
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <p>&copy; Rekayasa Perangkat Lunak Sistem Bengkel.</p>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <form action="../../core/editMekanik.php?id= <?php echo $id ?>" method="post" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label for="name">Nama Mekanik:</label>
-                            <input type="text" class="form-control" value="<?php echo $data['nama']?>" id="nama" name="nama" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Username:</label>
-                            <input type="text" class="form-control" value="<?php echo $data['username']?>" id="username" name="username" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Password:</label>
-                            <input type="password" class="form-control" value="<?php echo $data['password']?>" id="password" name="password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary mx-auto d-block">Edit</button>
-                    </form>
-                </div>
-            </div>
+            </footer>
         </div>
-        <div class="container mt-5">
-			<div class="card text-white bg-secondary mb-3">
-				<div class="card-header">
-                <center>
-					<h2>Data Mekanik</h2> 
-                    <center>
-				</div>
-				<div class="card-body">
-					<table class="table table-dark table-striped table-hover">
-						<thead>
-							<tr>
-								<th scope="col">Nama Mekanik</th>
-								<th scope="col">Username</th>
-                                <th scope="col">Password</th>
-								<th scope="col">Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-							include '../../core/koneksi.php';
-							$query = mysqli_query($konek, "select * from mekanik");
-                            while ($data = mysqli_fetch_array($query)) { ?>
-                                <tr>
-                                    <td><?php echo $data['nama']; ?></td>
-                                    <td><?php echo $data['username']; ?></td>
-                                    <td><?php echo $data['password']; ?></td>
-                                    <td>
-                                        <?php
-                                            echo '<a class="btn btn-success" href="./editMekanik.php?id=' . $data['id'] . '">Edit</a>';
-                                            echo '<a class="btn btn-success" href="../../core/hapusMekanik.php?id=' . $data['id'] . '">Hapus</a>';
-                                        ?>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-    </main>
-
-    <footer class="bg-dark">
-        <div class="container text-center text-white">
-            <p>Bengkel Website</p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    </div>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../js/sb-admin-2.min.js"></script>
+    <script src="../vendor/chart.js/Chart.min.js"></script>
+    <script src="../js/demo/chart-area-demo.js"></script>
+    <script src="../js/demo/chart-pie-demo.js"></script>
 </body>
 </html>
+                
+    

@@ -10,7 +10,9 @@ $cek = mysqli_num_rows($data);
 if($cek >0){
     $row = mysqli_fetch_assoc($data);
     $_SESSION["id"]=$row["id"];
-    header("location:../page/mekanik/dashboard.php");
+    $_SESSION["username"]=$row["username"];
+    $_SESSION["role"]="mekanik";
+    header("location:../page/mekanik/index.php");
 }else{
     header("location:../page/loginMekanik.php?pesan=gagal");
 }
